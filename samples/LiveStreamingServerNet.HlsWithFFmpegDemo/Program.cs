@@ -107,14 +107,14 @@ namespace LiveStreamingServerNet.HlsWithFFmpegDemo
             public Task OnStreamProcessorStartedAsync(IEventContext context, string processor, Guid identifier, uint clientId, string inputPath, string outputPath, string streamPath, IReadOnlyDictionary<string, string> streamArguments)
             {
                 outputPath = Path.GetRelativePath(_outputDir, outputPath);
-                _logger.LogInformation($"[{identifier}] Streaming processor {processor} started: {inputPath} -> {outputPath}");
+                _logger.LogInformation("[{Identifier}] Streaming processor {Processor} started: {InputPath} -> {OutputPath}", identifier, processor, inputPath, outputPath);
                 return Task.CompletedTask;
             }
 
             public Task OnStreamProcessorStoppedAsync(IEventContext context, string processor, Guid identifier, uint clientId, string inputPath, string outputPath, string streamPath, IReadOnlyDictionary<string, string> streamArguments)
             {
                 outputPath = Path.GetRelativePath(_outputDir, outputPath);
-                _logger.LogInformation($"[{identifier}] Streaming processor {processor} stopped: {inputPath} -> {outputPath}");
+                _logger.LogInformation("[{Identifier}] Streaming processor {Processor} stopped: {InputPath} -> {OutputPath}", identifier, processor, inputPath, outputPath);
                 return Task.CompletedTask;
             }
         }

@@ -12,7 +12,8 @@
         /// <returns>The full path to the executable if found, null otherwise.</returns>
         public static string? FindExecutableFromPATH(string executableName)
         {
-            foreach (string path in GetPaths())
+            var searchPaths = GetPaths();
+            foreach (string path in searchPaths)
             {
                 var executable = FindExecutable(path, executableName);
                 if (executable != null)
