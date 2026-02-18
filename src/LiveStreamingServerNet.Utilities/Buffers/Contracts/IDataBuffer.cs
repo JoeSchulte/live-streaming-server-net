@@ -1,9 +1,8 @@
 ﻿namespace LiveStreamingServerNet.Utilities.Buffers.Contracts
 {
-    public interface IDataBuffer : IDisposable
+    public interface IDataBuffer : IDataBufferReader
     {
-        int Position { get; set; }
-        int Size { get; set; }
+        new int Size { get; set; }
 
         Span<byte> AsSpan();
         Span<byte> AsSpan(int offset);
@@ -17,13 +16,16 @@
 
         void TrimStart(int count);
         void Advance(int count);
+        void Advance(int count, bool allowExpand);
         IDataBuffer MoveTo(int position);
+        IDataBuffer MoveTo(int position, bool allowExpand);
         void Reset();
         Task FlushAsync(Stream output);
         void Flush(Stream output);
         void Flush(IDataBuffer output);
         void CopyAllTo(IDataBuffer targetBuffer);
         void ReadAndWriteTo(IDataBuffer targetBuffer, int bytesCount);
+        void FromRentedBuffer(IRentedBuffer rentedBuffer);
         ValueTask FromStreamData(Stream stream, int bytesCount, CancellationToken cancellationToken = default);
         ValueTask AppendStreamData(Stream stream, int bytesCount, CancellationToken cancellationToken = default);
         ValueTask FromStreamData(IStreamReader stream, int bytesCount, CancellationToken cancellationToken = default);
@@ -32,26 +34,6 @@
         IRentedBuffer ToRentedBuffer(int initialClaim = 1);
 
         void WriteRandomBytes(int count);
-        bool ReadBoolean();
-        byte ReadByte();
-        void ReadBytes(byte[] buffer, int index, int count);
-        byte[] ReadBytes(int count);
-        char ReadChar();
-        double ReadDouble();
-        short ReadInt16();
-        int ReadInt32();
-        long ReadInt64();
-        float ReadSingle();
-        ushort ReadUInt16();
-        uint ReadUInt32();
-        ulong ReadUInt64();
-        ushort ReadUInt16BigEndian();
-        uint ReadUInt24BigEndian();
-        uint ReadUInt32BigEndian();
-        short ReadInt16BigEndian();
-        int ReadInt24BigEndian();
-        int ReadInt32BigEndian();
-
         void Write(bool value);
         void Write(byte value);
         void Write(byte[] buffer);
@@ -68,11 +50,15 @@
         void Write(ulong value);
         void Write(ushort value);
 
-        void WriteUint16BigEndian(ushort value);
+        void WriteUInt16BigEndian(ushort value);
         void WriteUInt24BigEndian(uint value);
         void WriteUInt32BigEndian(uint value);
+        void WriteUInt64BigEndian(ulong value);
         void WriteInt16BigEndian(short value);
         void WriteInt24BigEndian(int value);
         void WriteInt32BigEndian(int value);
+        void WriteInt64BigEndian(long value);
+
+        void WriteUtf8String(string value);
     }
 }
